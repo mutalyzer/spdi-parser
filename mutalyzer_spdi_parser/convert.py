@@ -3,8 +3,10 @@ Module for converting SPDI descriptions and lark parse trees
 to their equivalent dictionary models.
 """
 
-from lark import Token, Transformer
 from copy import deepcopy
+
+from lark import Transformer
+
 from .spdi_parser import parse
 
 
@@ -38,32 +40,28 @@ def parse_tree_to_model(parse_tree, raw=True):
 class Converter(Transformer):
     def description(self, children):
         description = {k: v for d in children for k, v in d.items()}
-        if description.get("deleted") or description.get("inserted"):
-            description["type"] = "deletion_insertion"
-        else:
-            description["type"] = "equal"
         return description
 
-    def deleted(self, children):
-        return {"deleted": children}
+    def deleted_sequence(self, children):
+        return {"deleted_sequence": children[0]}
 
-    def inserted(self, children):
-        return {"inserted": children}
+    def inserted_sequence(self, children):
+        return {"inserted_sequence": children[0]}
 
-    def point(self, children):
-        return {"location": {"type": "point", "position": children[0]}}
+    def position(self, children):
+        return {"position": children[0]}
 
-    def length(self, children):
-        return {"length": {"type": "point", "value": children[0]}}
+    def deleted_length(self, children):
+        return {"deleted_length": children[0]}
 
     def NUMBER(self, name):
         return int(name)
 
     def SEQUENCE(self, name):
-        return {"sequence": name.value, "source": "description"}
+        return name.value
 
     def ID(self, name):
-        return {"reference": {"id": name.value}}
+        return {"seq_id": name.value}
 
 
 def _to_hgvs_location(r_m):
@@ -78,8 +76,7 @@ def _to_hgvs_location(r_m):
         ):
             m["location"]["position"] = r_m["location"]["position"] + 1
         elif (
-            r_m["deleted"][0].get("length")
-            and r_m["deleted"][0]["length"]["value"] > 1
+            r_m["deleted"][0].get("length") and r_m["deleted"][0]["length"]["value"] > 1
         ):
             m["location"] = _range(
                 r_m["location"]["position"] + 1,

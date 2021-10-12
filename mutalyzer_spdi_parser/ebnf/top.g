@@ -1,12 +1,12 @@
-description: ID ":" point ":" deleted? ":" inserted?
+description: ID ":" position ":" (deleted_sequence | deleted_length)? ":" inserted_sequence?
 
-point: NUMBER
+position: NUMBER
 
-deleted: SEQUENCE | length
+deleted_sequence: SEQUENCE
 
-inserted: SEQUENCE
+deleted_length: NUMBER
 
-length: NUMBER
+inserted_sequence: SEQUENCE
 
 ID: (LETTER | DIGIT) (LETTER | DIGIT | "." | "_" | "-")*
 
