@@ -12,11 +12,8 @@ from .spdi_parser import parse
 
 def to_model(description, raw=True):
     """
-    Convert an SPDI description, or parts of it, e.g., a location,
-    a variants list, etc., if an appropriate alternative `start_rule`
-    is provided, to a nested dictionary model.
+    Convert an SPDI description to a dictionary model.
     :arg str description: SPDI description.
-    :arg str start_rule: Alternative start rule.
     :returns: Description dictionary model.
     :rtype: dict
     """
@@ -25,7 +22,7 @@ def to_model(description, raw=True):
 
 def parse_tree_to_model(parse_tree, raw=True):
     """
-    Convert a parse tree to a nested dictionary model.
+    Convert a parse tree to a dictionary model.
     :arg lark.Tree parse_tree: SPDI description equivalent parse tree.
     :returns: Description dictionary model.
     :rtype: dict
