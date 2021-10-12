@@ -20,11 +20,14 @@ TESTS_SET = [
             "reference": {"id": "NG_012337.3"},
             "variants": [
                 {
-                    "location": {"type": "point", "position": 11},
+                    "location": {
+                        "type": "range",
+                        "start": {"type": "point", "position": 10},
+                        "end": {"type": "point", "position": 11},
+                    },
                     "deleted": [{"sequence": "C", "source": "description"}],
                     "inserted": [{"sequence": "T", "source": "description"}],
-                    "type": "deletion_insertion",
-                },
+                }
             ],
         },
     ),
@@ -37,11 +40,19 @@ TESTS_SET = [
             "inserted_sequence": "T",
         },
         {
+            "type": "description_dna",
             "reference": {"id": "NG_012337.3"},
-            "location": {"type": "point", "position": 11},
-            "deleted": [{"length": {"type": "point", "value": 1}}],
-            "inserted": [{"sequence": "T", "source": "description"}],
-            "type": "deletion_insertion",
+            "variants": [
+                {
+                    "location": {
+                        "type": "range",
+                        "start": {"type": "point", "position": 10},
+                        "end": {"type": "point", "position": 11},
+                    },
+                    "deleted": [{"length": {"type": "point", "value": 1}}],
+                    "inserted": [{"sequence": "T", "source": "description"}],
+                }
+            ],
         },
     ),
     (
@@ -51,7 +62,20 @@ TESTS_SET = [
             "position": 10,
             "inserted_sequence": "T",
         },
-        {},
+        {
+            "type": "description_dna",
+            "reference": {"id": "NG_012337.3"},
+            "variants": [
+                {
+                    "location": {
+                        "type": "range",
+                        "start": {"type": "point", "position": 10},
+                        "end": {"type": "point", "position": 11},
+                    },
+                    "inserted": [{"sequence": "T", "source": "description"}],
+                }
+            ],
+        },
     ),
     (
         "NG_012337.3:10:CT:T",
@@ -62,15 +86,19 @@ TESTS_SET = [
             "inserted_sequence": "T",
         },
         {
+            "type": "description_dna",
             "reference": {"id": "NG_012337.3"},
-            "location": {
-                "type": "range",
-                "start": {"type": "point", "position": 11},
-                "end": {"type": "point", "position": 12},
-            },
-            "deleted": [{"sequence": "CT", "source": "description"}],
-            "inserted": [{"sequence": "T", "source": "description"}],
-            "type": "deletion_insertion",
+            "variants": [
+                {
+                    "location": {
+                        "type": "range",
+                        "start": {"type": "point", "position": 10},
+                        "end": {"type": "point", "position": 11},
+                    },
+                    "deleted": [{"sequence": "CT", "source": "description"}],
+                    "inserted": [{"sequence": "T", "source": "description"}],
+                }
+            ],
         },
     ),
     (
@@ -82,15 +110,19 @@ TESTS_SET = [
             "inserted_sequence": "T",
         },
         {
+            "type": "description_dna",
             "reference": {"id": "NG_012337.3"},
-            "location": {
-                "type": "range",
-                "start": {"type": "point", "position": 11},
-                "end": {"type": "point", "position": 12},
-            },
-            "deleted": [{"length": {"type": "point", "value": 2}}],
-            "inserted": [{"sequence": "T", "source": "description"}],
-            "type": "deletion_insertion",
+            "variants": [
+                {
+                    "location": {
+                        "type": "range",
+                        "start": {"type": "point", "position": 10},
+                        "end": {"type": "point", "position": 11},
+                    },
+                    "deleted": [{"length": {"type": "point", "value": 2}}],
+                    "inserted": [{"sequence": "T", "source": "description"}],
+                }
+            ],
         },
     ),
 ]

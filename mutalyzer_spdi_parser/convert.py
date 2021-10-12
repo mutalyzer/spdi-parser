@@ -31,13 +31,12 @@ def parse_tree_to_model(parse_tree, raw=True):
     if raw:
         return raw_model
     else:
-        return _to_hgvs_location(raw_model)
+        return _to_hgvs(raw_model)
 
 
 class Converter(Transformer):
     def description(self, children):
-        description = {k: v for d in children for k, v in d.items()}
-        return description
+        return {k: v for d in children for k, v in d.items()}
 
     def deleted_sequence(self, children):
         return {"deleted_sequence": children[0]}
@@ -61,29 +60,29 @@ class Converter(Transformer):
         return {"seq_id": name.value}
 
 
-def _to_hgvs_location(r_m):
-    m = deepcopy(r_m)
-    if r_m.get("deleted"):
-        if (
-            r_m["deleted"][0].get("length")
-            and r_m["deleted"][0]["length"]["value"] == 1
-        ) or (
-            r_m["deleted"][0].get("sequence")
-            and len(r_m["deleted"][0]["sequence"]) == 1
-        ):
-            m["location"]["position"] = r_m["location"]["position"] + 1
-        elif (
-            r_m["deleted"][0].get("length") and r_m["deleted"][0]["length"]["value"] > 1
-        ):
-            m["location"] = _range(
-                r_m["location"]["position"] + 1,
-                r_m["location"]["position"] + r_m["deleted"][0]["length"]["value"],
-            )
-        elif r_m["deleted"][0].get("sequence"):
-            m["location"] = _range(
-                r_m["location"]["position"] + 1,
-                r_m["location"]["position"] + len(r_m["deleted"][0]["sequence"]),
-            )
+def _to_hgvs(s_m):
+    m = {"type": "description_dna", "reference": {"id": s_m["seq_id"]}}
+    v = {}
+    if s_m.get("deleted_sequence"):
+        v["location"] = _range(
+            s_m["position"] + 1, s_m["position"] + len(s_m["deleted_sequence"])
+        )
+        v["deleted"] = [
+            {"sequence": s_m["deleted_sequence"], "source": "description"}
+        ]
+    elif s_m.get("deleted_length"):
+        v["location"] = _range(
+            s_m["position"] + 1, s_m["position"] + s_m["deleted_length"]
+        )
+        v["deleted"] = [
+            {"length": {"type": "point", "value": s_m["deleted_length"]}}
+        ]
+    if s_m.get("inserted_sequence"):
+        v["location"] = _range(s_m["position"], s_m["position"] + 1)
+        v["inserted"] = [
+            {"sequence": s_m["inserted_sequence"], "source": "description"}
+        ]
+    m["variants"] = [v]
     return m
 
 
