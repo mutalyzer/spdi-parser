@@ -1,10 +1,6 @@
-"""
-Tests for the lark tree to dictionary converter.
-"""
-
 import pytest
 
-from mutalyzer_spdi_parser.convert import to_model
+from mutalyzer_spdi_parser.convert import to_hgvs_internal_model, to_spdi_model
 
 TESTS_SET = [
     (
@@ -20,6 +16,7 @@ TESTS_SET = [
             "reference": {"id": "NG_012337.3"},
             "variants": [
                 {
+                    "type": "deletion_insertion",
                     "location": {
                         "type": "range",
                         "start": {"type": "point", "position": 10},
@@ -44,12 +41,12 @@ TESTS_SET = [
             "reference": {"id": "NG_012337.3"},
             "variants": [
                 {
+                    "type": "deletion_insertion",
                     "location": {
                         "type": "range",
                         "start": {"type": "point", "position": 10},
                         "end": {"type": "point", "position": 11},
                     },
-                    "deleted": [{"length": {"type": "point", "value": 1}}],
                     "inserted": [{"sequence": "T", "source": "description"}],
                 }
             ],
@@ -67,10 +64,35 @@ TESTS_SET = [
             "reference": {"id": "NG_012337.3"},
             "variants": [
                 {
+                    "type": "deletion_insertion",
                     "location": {
                         "type": "range",
                         "start": {"type": "point", "position": 10},
-                        "end": {"type": "point", "position": 11},
+                        "end": {"type": "point", "position": 10},
+                    },
+                    "inserted": [{"sequence": "T", "source": "description"}],
+                }
+            ],
+        },
+    ),
+    (
+        "NG_012337.3:10:0:T",
+        {
+            "seq_id": "NG_012337.3",
+            "position": 10,
+            "deleted_length": 0,
+            "inserted_sequence": "T",
+        },
+        {
+            "type": "description_dna",
+            "reference": {"id": "NG_012337.3"},
+            "variants": [
+                {
+                    "type": "deletion_insertion",
+                    "location": {
+                        "type": "range",
+                        "start": {"type": "point", "position": 10},
+                        "end": {"type": "point", "position": 10},
                     },
                     "inserted": [{"sequence": "T", "source": "description"}],
                 }
@@ -90,10 +112,11 @@ TESTS_SET = [
             "reference": {"id": "NG_012337.3"},
             "variants": [
                 {
+                    "type": "deletion_insertion",
                     "location": {
                         "type": "range",
                         "start": {"type": "point", "position": 10},
-                        "end": {"type": "point", "position": 11},
+                        "end": {"type": "point", "position": 12},
                     },
                     "deleted": [{"sequence": "CT", "source": "description"}],
                     "inserted": [{"sequence": "T", "source": "description"}],
@@ -114,13 +137,89 @@ TESTS_SET = [
             "reference": {"id": "NG_012337.3"},
             "variants": [
                 {
+                    "type": "deletion_insertion",
+                    "location": {
+                        "type": "range",
+                        "start": {"type": "point", "position": 10},
+                        "end": {"type": "point", "position": 12},
+                    },
+                    "inserted": [{"sequence": "T", "source": "description"}],
+                }
+            ],
+        },
+    ),
+    (
+        "NG_012337.3:10:2:",
+        {
+            "seq_id": "NG_012337.3",
+            "position": 10,
+            "deleted_length": 2,
+        },
+        {
+            "type": "description_dna",
+            "reference": {"id": "NG_012337.3"},
+            "variants": [
+                {
+                    "type": "deletion_insertion",
+                    "location": {
+                        "type": "range",
+                        "start": {"type": "point", "position": 10},
+                        "end": {"type": "point", "position": 12},
+                    },
+                }
+            ],
+        },
+    ),
+    (
+        "NG_012337.3:10:CT:",
+        {
+            "seq_id": "NG_012337.3",
+            "position": 10,
+            "deleted_sequence": "CT",
+        },
+        {
+            "type": "description_dna",
+            "reference": {"id": "NG_012337.3"},
+            "variants": [
+                {
+                    "type": "deletion_insertion",
+                    "location": {
+                        "type": "range",
+                        "start": {"type": "point", "position": 10},
+                        "end": {"type": "point", "position": 12},
+                    },
+                    "deleted": [{"sequence": "CT", "source": "description"}],
+                }
+            ],
+        },
+    ),
+    (
+        "NG_012337.3:10::",
+        {
+            "seq_id": "NG_012337.3",
+            "position": 10,
+        },
+        {
+            "type": "description_dna",
+            "reference": {"id": "NG_012337.3"},
+            "variants": [
+                {
+                    "type": "deletion_insertion",
                     "location": {
                         "type": "range",
                         "start": {"type": "point", "position": 10},
                         "end": {"type": "point", "position": 11},
                     },
-                    "deleted": [{"length": {"type": "point", "value": 2}}],
-                    "inserted": [{"sequence": "T", "source": "description"}],
+                    "inserted": [
+                        {
+                            "location": {
+                                "type": "range",
+                                "start": {"type": "point", "position": 10},
+                                "end": {"type": "point", "position": 11},
+                            },
+                            "source": "reference",
+                        }
+                    ],
                 }
             ],
         },
@@ -132,14 +231,13 @@ TESTS_SET = [
     "description, model",
     [(t[0], t[1]) for t in TESTS_SET],
 )
-def test_convert_spdi(description, model):
-    assert to_model(description) == model
+def test_to_spdi_model(description, model):
+    assert to_spdi_model(description) == model
 
 
 @pytest.mark.parametrize(
     "description, model",
     [(t[0], t[2]) for t in TESTS_SET],
 )
-def test_convert_hgvs(description, model):
-    print(to_model(description, raw=False))
-    assert to_model(description, raw=False) == model
+def test_to_hgvs_internal_model(description, model):
+    assert to_hgvs_internal_model(description) == model

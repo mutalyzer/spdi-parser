@@ -3,35 +3,40 @@ Module for converting SPDI descriptions and lark parse trees
 to their equivalent dictionary models.
 """
 
-from copy import deepcopy
-
 from lark import Transformer
 
 from .spdi_parser import parse
 
 
-def to_model(description, raw=True):
+def to_spdi_model(description):
     """
     Convert an SPDI description to a dictionary model.
     :arg str description: SPDI description.
     :returns: Description dictionary model.
     :rtype: dict
     """
-    return parse_tree_to_model(parse(description), raw)
+    return parse_tree_to_model(parse(description))
 
 
-def parse_tree_to_model(parse_tree, raw=True):
+def to_hgvs_internal_model(description):
+    """
+    Convert an SPDI description to an internal HGVS dictionary model
+    (delins variants with internal locations).
+    :arg str description: SPDI description.
+    :returns: HGVS internal dictionary model.
+    :rtype: dict
+    """
+    return _to_hgvs_internal(parse_tree_to_model(parse(description)))
+
+
+def parse_tree_to_model(parse_tree):
     """
     Convert a parse tree to a dictionary model.
     :arg lark.Tree parse_tree: SPDI description equivalent parse tree.
     :returns: Description dictionary model.
     :rtype: dict
     """
-    raw_model = Converter().transform(parse_tree)
-    if raw:
-        return raw_model
-    else:
-        return _to_hgvs(raw_model)
+    return Converter().transform(parse_tree)
 
 
 class Converter(Transformer):
@@ -60,28 +65,35 @@ class Converter(Transformer):
         return {"seq_id": name.value}
 
 
-def _to_hgvs(s_m):
+def _to_hgvs_internal(s_m):
     m = {"type": "description_dna", "reference": {"id": s_m["seq_id"]}}
-    v = {}
+    v = {"type": "deletion_insertion"}
     if s_m.get("deleted_sequence"):
         v["location"] = _range(
-            s_m["position"] + 1, s_m["position"] + len(s_m["deleted_sequence"])
+            s_m["position"], s_m["position"] + len(s_m["deleted_sequence"])
         )
-        v["deleted"] = [
-            {"sequence": s_m["deleted_sequence"], "source": "description"}
-        ]
+        v["deleted"] = [{"sequence": s_m["deleted_sequence"], "source": "description"}]
     elif s_m.get("deleted_length"):
-        v["location"] = _range(
-            s_m["position"] + 1, s_m["position"] + s_m["deleted_length"]
-        )
-        v["deleted"] = [
-            {"length": {"type": "point", "value": s_m["deleted_length"]}}
-        ]
+        v["location"] = _range(s_m["position"], s_m["position"] + s_m["deleted_length"])
+    else:
+        v["location"] = _range(s_m["position"], s_m["position"])
+
     if s_m.get("inserted_sequence"):
-        v["location"] = _range(s_m["position"], s_m["position"] + 1)
         v["inserted"] = [
             {"sequence": s_m["inserted_sequence"], "source": "description"}
         ]
+
+    if not s_m.get("inserted_sequence") and not (
+        s_m.get("deleted_sequence") or s_m.get("deleted_length")
+    ):
+        v["location"] = _range(s_m["position"], s_m["position"] + 1)
+        v["inserted"] = [
+            {
+                "location": _range(s_m["position"], s_m["position"] + 1),
+                "source": "reference",
+            }
+        ]
+
     m["variants"] = [v]
     return m
 
@@ -97,4 +109,11 @@ def _range(s, e):
             "type": "point",
             "position": e,
         },
+    }
+
+
+def _point(p):
+    return {
+        "type": "point",
+        "position": p,
     }

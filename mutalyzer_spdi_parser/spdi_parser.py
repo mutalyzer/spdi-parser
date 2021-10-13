@@ -4,8 +4,7 @@ Module for parsing SPDI variant descriptions.
 
 import os
 
-from lark import Lark, Token, Transformer, Tree
-from lark.exceptions import UnexpectedCharacters, UnexpectedEOF
+from lark import Lark
 
 
 def _read_grammar_file(file_name):

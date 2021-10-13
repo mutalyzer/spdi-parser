@@ -8,8 +8,8 @@ import json
 from lark.tree import pydot__tree_to_png
 
 from . import usage, version
+from .convert import parse_tree_to_model, to_hgvs_internal_model
 from .spdi_parser import parse
-from .convert import parse_tree_to_model
 
 
 def _parse(description, grammar_path):
@@ -21,12 +21,25 @@ def _parse(description, grammar_path):
     return parse_tree
 
 
-def _to_model(description, raw):
+def _to_spdi_model(description):
     """
     CLI wrapper for parsing, converting, and printing the model.
     """
     parse_tree = parse(description)
-    model = parse_tree_to_model(parse_tree, raw)
+    model = parse_tree_to_model(parse_tree)
+    if isinstance(model, dict) or isinstance(model, list):
+        print(json.dumps(model, indent=2))
+    else:
+        print(model)
+    return parse_tree
+
+
+def _to_hgvs_internal_model(description):
+    """
+    CLI wrapper for parsing, converting, and printing the HGVS internal model.
+    """
+    parse_tree = parse(description)
+    model = to_hgvs_internal_model(description)
     if isinstance(model, dict) or isinstance(model, list):
         print(json.dumps(model, indent=2))
     else:
@@ -46,12 +59,16 @@ def _arg_parser():
 
     parser.add_argument("description", help="the SPDI variant description to be parsed")
 
-    parser.add_argument(
-        "-c", action="store_true", help="convert the description to the model"
+    alt = parser.add_mutually_exclusive_group()
+
+    alt.add_argument(
+        "-cs", action="store_true", help="convert the description to the model"
     )
 
-    parser.add_argument(
-        "-r", action="store_true", help="raw model"
+    alt.add_argument(
+        "-ch",
+        action="store_true",
+        help="convert to the HGVS internal coordinates model",
     )
 
     parser.add_argument(
@@ -64,10 +81,10 @@ def _arg_parser():
 
 
 def _cli(args):
-    if args.c:
-        parse_tree = _to_model(args.description, args.r)
-    else:
-        parse_tree = _parse(args.description)
+    if args.cs:
+        parse_tree = _to_spdi_model(args.description)
+    elif args.ch:
+        parse_tree = _to_hgvs_internal_model(args.description)
 
     if args.i and parse_tree:
         pydot__tree_to_png(parse_tree, args.i)
