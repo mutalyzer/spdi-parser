@@ -8,15 +8,19 @@ deleted_length: NUMBER
 
 inserted_sequence: sequence
 
-ID: (LETTER | DIGIT) (LETTER | DIGIT | "." | "_" | "-")*
-
-NUMBER: DIGIT+
-
 sequence: D_SEQUENCE | R_SEQUENCE | P_SEQUENCE
+
+ID: (LETTER | DIGIT) (LETTER | DIGIT | "." | "_" | "-")*
 
 LETTER: UCASE_LETTER | LCASE_LETTER
 
 DIGIT: "0".."9"
+
+LCASE_LETTER: "a".."z"
+
+UCASE_LETTER: "A".."Z"
+
+NUMBER: DIGIT+
 
 D_SEQUENCE: D_NT+
 
@@ -30,19 +34,8 @@ R_NT: "a" | "c" | "g" | "u" | "b" | "d" | "h" | "k" | "m"
 
 P_SEQUENCE: AA+
 
-AA: "Ala" | "Arg" | "Asn" | "Asp" | "Cys" | "Gln" | "Glu"
-  | "Gly" | "His" | "Ile" | "Leu" | "Lys" | "Met" | "Phe"
-  | "Pro" | "Ser" | "Thr" | "Trp" | "Tyr" | "Val"
-  | "Sec"
-  | "Ter"
-  | "Xaa"
-  | "A"   | "R"   | "N"   | "D"   | "C"   | "Q"   | "E"
-  | "G"   | "H"   | "I"   | "L"   | "K"   | "M"   | "F"
-  | "P"   | "S"   | "T"   | "W"    | "Y"  | "V"
-  | "U"
+AA: "A" | "B" | "C" | "D" | "E" | "F" | "G" | "H" | "I"
+  | "K" | "L" | "M" | "N" | "P" | "Q" | "R" | "S" | "T"
+  | "U" | "V" | "W" | "Y" | "Z"
   | "*"
   | "X"
-
-LCASE_LETTER: "a".."z"
-
-UCASE_LETTER: "A".."Z"

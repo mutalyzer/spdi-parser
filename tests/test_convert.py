@@ -225,12 +225,12 @@ TESTS_SET = [
         },
     ),
     (
-        "NP_003997.1:1:Met:ArgSerThrVal",
+        "NP_003997.1:1:M:RSTV",
         {
             "seq_id": "NP_003997.1",
             "position": 1,
-            "deleted_sequence": "Met",
-            "inserted_sequence": "ArgSerThrVal",
+            "deleted_sequence": "M",
+            "inserted_sequence": "RSTV",
         },
         {
             "type": "description_dna",
@@ -241,10 +241,10 @@ TESTS_SET = [
                     "location": {
                         "type": "range",
                         "start": {"type": "point", "position": 1},
-                        "end": {"type": "point", "position": 4},
+                        "end": {"type": "point", "position": 2},
                     },
-                    "deleted": [{"sequence": "Met", "source": "description"}],
-                    "inserted": [{"sequence": "ArgSerThrVal", "source": "description"}],
+                    "deleted": [{"sequence": "M", "source": "description"}],
+                    "inserted": [{"sequence": "RSTV", "source": "description"}],
                 }
             ],
         },
