@@ -38,9 +38,7 @@ class SpdiParser:
         if self._ignore_whitespaces:
             grammar += "\n%import common.WS\n%ignore WS"
 
-        self._parser = Lark(
-            grammar, parser="earley", start="description", ambiguity="explicit"
-        )
+        self._parser = Lark(grammar, parser="earley", start="description")
 
     def parse(self, description):
         """

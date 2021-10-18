@@ -224,6 +224,56 @@ TESTS_SET = [
             ],
         },
     ),
+    (
+        "NP_003997.1:1:Met:ArgSerThrVal",
+        {
+            "seq_id": "NP_003997.1",
+            "position": 1,
+            "deleted_sequence": "Met",
+            "inserted_sequence": "ArgSerThrVal",
+        },
+        {
+            "type": "description_dna",
+            "reference": {"id": "NP_003997.1"},
+            "variants": [
+                {
+                    "type": "deletion_insertion",
+                    "location": {
+                        "type": "range",
+                        "start": {"type": "point", "position": 1},
+                        "end": {"type": "point", "position": 4},
+                    },
+                    "deleted": [{"sequence": "Met", "source": "description"}],
+                    "inserted": [{"sequence": "ArgSerThrVal", "source": "description"}],
+                }
+            ],
+        },
+    ),
+    (
+        "NM_003002.2:273:g:u",
+        {
+            "seq_id": "NM_003002.2",
+            "position": 273,
+            "deleted_sequence": "g",
+            "inserted_sequence": "u",
+        },
+        {
+            "type": "description_dna",
+            "reference": {"id": "NM_003002.2"},
+            "variants": [
+                {
+                    "type": "deletion_insertion",
+                    "location": {
+                        "type": "range",
+                        "start": {"type": "point", "position": 273},
+                        "end": {"type": "point", "position": 274},
+                    },
+                    "deleted": [{"sequence": "g", "source": "description"}],
+                    "inserted": [{"sequence": "u", "source": "description"}],
+                }
+            ],
+        },
+    ),
 ]
 
 

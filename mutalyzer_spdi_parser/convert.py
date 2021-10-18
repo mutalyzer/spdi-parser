@@ -41,6 +41,7 @@ def parse_tree_to_model(parse_tree):
 
 class Converter(Transformer):
     def description(self, children):
+        print(children)
         return {k: v for d in children for k, v in d.items()}
 
     def deleted_sequence(self, children):
@@ -55,10 +56,19 @@ class Converter(Transformer):
     def deleted_length(self, children):
         return {"deleted_length": children[0]}
 
+    def sequence(self, children):
+        return children[0]
+
     def NUMBER(self, name):
         return int(name)
 
-    def SEQUENCE(self, name):
+    def D_SEQUENCE(self, name):
+        return name.value
+
+    def R_SEQUENCE(self, name):
+        return name.value
+
+    def P_SEQUENCE(self, name):
         return name.value
 
     def ID(self, name):
