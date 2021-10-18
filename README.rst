@@ -77,11 +77,13 @@ Parse and convert a description from the command line:
     }
 
 
-The ``to_model()`` function can be used for the same purpose:
+The ``to_hgvs_internal_model()`` function can be used to obtain the equivalent
+HGVS dictionary model (deletion insertion variants with internal locations and
+indexing):
 
 .. code:: python
 
-    >>> from mutalyzer_spdi_parser import to_hgvs_internal_model
+    >>> from mutalyzer_spdi_parser import v
     >>> model = to_hgvs_internal_model("NG_012337.3:10:C:T")
     >>> model['reference']
     {'id': 'NG_012337.3'}
