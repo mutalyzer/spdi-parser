@@ -83,7 +83,7 @@ indexing):
 
 .. code:: python
 
-    >>> from mutalyzer_spdi_parser import v
+    >>> from mutalyzer_spdi_parser import to_hgvs_internal_model
     >>> model = to_hgvs_internal_model("NG_012337.3:10:C:T")
     >>> model['reference']
     {'id': 'NG_012337.3'}
