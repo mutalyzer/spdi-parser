@@ -1,5 +1,6 @@
 from pkg_resources import get_distribution
 
+from .convert import to_hgvs_internal_model
 from .spdi_parser import parse
 
 
