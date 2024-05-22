@@ -1,4 +1,6 @@
-description: ID ":" position ":" (deleted_sequence | deleted_length)? ":" inserted_sequence?
+description: reference ":" position ":" (deleted_sequence | deleted_length)? ":" inserted_sequence?
+
+reference: ID reference? | "(" ID reference? ")"
 
 position: NUMBER
 

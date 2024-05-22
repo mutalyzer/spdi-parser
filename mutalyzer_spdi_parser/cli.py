@@ -17,7 +17,7 @@ def _parse(description, grammar_path):
     CLI wrapper for parsing with no conversion to model.
     """
     parse_tree = parse(description, grammar_path)
-    print("Successfully parsed:\n {}".format(description))
+    print(f"Successfully parsed:\n {description}")
     return parse_tree
 
 
@@ -27,7 +27,7 @@ def _to_spdi_model(description):
     """
     parse_tree = parse(description)
     model = parse_tree_to_model(parse_tree)
-    if isinstance(model, dict) or isinstance(model, list):
+    if isinstance(model, (dict, list)):
         print(json.dumps(model, indent=2))
     else:
         print(model)
@@ -40,7 +40,7 @@ def _to_hgvs_internal_model(description):
     """
     parse_tree = parse(description)
     model = to_hgvs_internal_model(description)
-    if isinstance(model, dict) or isinstance(model, list):
+    if isinstance(model, (dict, list)):
         print(json.dumps(model, indent=2))
     else:
         print(model)
@@ -88,15 +88,12 @@ def _cli(args):
 
     if args.i and parse_tree:
         pydot__tree_to_png(parse_tree, args.i)
-        print("Parse tree image saved to:\n {}".format(args.i))
+        print(f"Parse tree image saved to:\n {args.i}")
 
 
 def main():
-
     parser = _arg_parser()
-
     args = parser.parse_args()
-
     _cli(args)
 
 

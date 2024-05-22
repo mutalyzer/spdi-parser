@@ -41,7 +41,17 @@ def parse_tree_to_model(parse_tree):
 
 class Converter(Transformer):
     def description(self, children):
-        return {k: v for d in children for k, v in d.items()}
+        output = {k: v for d in children for k, v in d.items()}
+        output["seq_id"] = output["id"]
+        output.pop("id")
+        return output
+
+    def reference(self, children):
+        output = {"id": children[0]["seq_id"]}
+        if len(children) == 2:
+            output["id"] = children[0]["seq_id"]
+            output["selector"] = children[1]
+        return output
 
     def deleted_sequence(self, children):
         return {"deleted_sequence": children[0]}
@@ -76,6 +86,9 @@ class Converter(Transformer):
 
 def _to_hgvs_internal(s_m):
     m = {"type": "description_dna", "reference": {"id": s_m["seq_id"]}}
+    if s_m.get("selector"):
+        m["reference"]["selector"]= s_m["selector"]
+
     v = {"type": "deletion_insertion"}
     if s_m.get("deleted_sequence"):
         v["location"] = _range(
@@ -87,10 +100,9 @@ def _to_hgvs_internal(s_m):
     else:
         v["location"] = _range(s_m["position"], s_m["position"])
 
+    v["inserted"] = []
     if s_m.get("inserted_sequence"):
-        v["inserted"] = [
-            {"sequence": s_m["inserted_sequence"], "source": "description"}
-        ]
+        v["inserted"].append({"sequence": s_m["inserted_sequence"], "source": "description"})
 
     if not s_m.get("inserted_sequence") and not (
         s_m.get("deleted_sequence") or s_m.get("deleted_length")

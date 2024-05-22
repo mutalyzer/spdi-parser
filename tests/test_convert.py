@@ -166,6 +166,7 @@ TESTS_SET = [
                         "start": {"type": "point", "position": 10},
                         "end": {"type": "point", "position": 12},
                     },
+                    "inserted": [],
                 }
             ],
         },
@@ -189,6 +190,7 @@ TESTS_SET = [
                         "end": {"type": "point", "position": 12},
                     },
                     "deleted": [{"sequence": "CT", "source": "description"}],
+                    "inserted": [],
                 }
             ],
         },
@@ -202,6 +204,38 @@ TESTS_SET = [
         {
             "type": "description_dna",
             "reference": {"id": "NG_012337.3"},
+            "variants": [
+                {
+                    "type": "deletion_insertion",
+                    "location": {
+                        "type": "range",
+                        "start": {"type": "point", "position": 10},
+                        "end": {"type": "point", "position": 11},
+                    },
+                    "inserted": [
+                        {
+                            "location": {
+                                "type": "range",
+                                "start": {"type": "point", "position": 10},
+                                "end": {"type": "point", "position": 11},
+                            },
+                            "source": "reference",
+                        }
+                    ],
+                }
+            ],
+        },
+    ),
+    (
+        "GRCh38(chr11):10::",
+        {
+            "seq_id": "GRCh38",
+            "position": 10,
+            "selector": {"id": "chr11"}
+        },
+        {
+            "type": "description_dna",
+            "reference": {"id": "GRCh38", "selector": {"id": "chr11"}},
             "variants": [
                 {
                     "type": "deletion_insertion",
