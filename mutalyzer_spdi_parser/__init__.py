@@ -1,34 +1,32 @@
-from pkg_resources import get_distribution
+from importlib.metadata import metadata, PackageNotFoundError
+from re import split
 
 from .convert import to_hgvs_internal_model
 from .spdi_parser import parse
 
 
-def _get_metadata(name):
-    pkg = get_distribution(__package__)
-
-    for line in pkg.get_metadata_lines(pkg.PKG_INFO):
-        if line.startswith("{}: ".format(name)):
-            return line.split(": ")[1]
-
-    return ""
-
-
-_copyright_notice = "Copyright (c) {} <{}>".format(
-    _get_metadata("Author"), _get_metadata("Author-email")
-)
-
-usage = [_get_metadata("Summary"), _copyright_notice]
+def _extract(key: str, delim: str = r'[^\s\S]', index: int = 0) -> str:
+    try:
+        value = metadata(__package__).get(key, '')
+    except PackageNotFoundError:
+        return '<NO DATA>'
+    return split(delim, value)[index]
 
 
 def doc_split(func):
     return func.__doc__.split("\n\n")[0]
 
 
-def version(name):
-    return "{} version {}\n\n{}\nHomepage: {}".format(
-        _get_metadata("Name"),
-        _get_metadata("Version"),
-        _copyright_notice,
-        _get_metadata("Home-page"),
-    )
+_email = _extract('Author-email', r'<|>', 1)
+_url = _extract('Project-URL', r', ', 1)
+_year = '2021-2026'
+
+project = _extract('Name')
+release = _extract('Version')
+author = _extract('Author-email', r' <|>', 0)
+description = _extract('Summary')
+copyright = f'{_year} by {author} <{_email}>'
+info = f'''{project} version {release}
+
+Copyright (c) {copyright}
+Homepage: {_url}'''
