@@ -7,7 +7,8 @@ import json
 
 from lark.tree import pydot__tree_to_png
 
-from . import description as package_description, info
+from . import description as package_description
+from . import info
 from .convert import parse_tree_to_model, to_hgvs_internal_model
 from .spdi_parser import parse
 

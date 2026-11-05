@@ -1,4 +1,4 @@
-from importlib.metadata import metadata, PackageNotFoundError
+from importlib.metadata import PackageNotFoundError, metadata
 from re import split
 
 from .convert import to_hgvs_internal_model
