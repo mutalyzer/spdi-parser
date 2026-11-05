@@ -1,2 +1,0 @@
-[console_scripts]
-mutalyzer_spdi_parser = mutalyzer_spdi_parser.cli:main

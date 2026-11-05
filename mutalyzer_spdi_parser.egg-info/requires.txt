@@ -1,9 +1,0 @@
-lark>=1.0.0
-
-[dev]
-build>=1.6.1
-fake-open>=0.0.1
-flake8>=7.4.1
-isort>=5.13.2
-pytest>=4.0.1
-twine>=7.0.0
