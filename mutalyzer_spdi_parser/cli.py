@@ -7,7 +7,8 @@ import json
 
 from lark.tree import pydot__tree_to_png
 
-from . import usage, version
+from . import description as package_description
+from . import info
 from .convert import parse_tree_to_model, to_hgvs_internal_model
 from .spdi_parser import parse
 
@@ -52,8 +53,8 @@ def _arg_parser():
     Command line argument parsing.
     """
     parser = argparse.ArgumentParser(
-        description=usage[0],
-        epilog=usage[1],
+        description=package_description,
+        epilog=info,
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
 
@@ -75,7 +76,7 @@ def _arg_parser():
         "-i", help="save the parse tree as a PNG image (pydot required!)"
     )
 
-    parser.add_argument("-v", action="version", version=version(parser.prog))
+    parser.add_argument("-v", action="version", version=info)
 
     return parser
 
@@ -91,11 +92,11 @@ def _cli(args):
         print(f"Parse tree image saved to:\n {args.i}")
 
 
-def main():
+def main() -> None:
     parser = _arg_parser()
     args = parser.parse_args()
-    _cli(args)
 
-
-if __name__ == "__main__":
-    main()
+    try:
+        _cli(args)
+    except OSError as error:
+        parser.error(error)
