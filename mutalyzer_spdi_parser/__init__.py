@@ -23,7 +23,7 @@ _year = '2021-2026'
 
 project = _extract('Name')
 release = _extract('Version')
-author = _extract('Author-email', r' <|>', 0)
+author = _extract('Author-email', r'"', 1)
 description = _extract('Summary')
 copyright = f'{_year} by {author} <{_email}>'
 info = f'''{project} version {release}

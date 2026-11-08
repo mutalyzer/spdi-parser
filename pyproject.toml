@@ -1,5 +1,5 @@
 [build-system]
-requires = ['setuptools>=61']
+requires = ['setuptools>=77']
 build-backend = 'setuptools.build_meta'
 
 [project]
@@ -8,20 +8,20 @@ description = 'Mutalyzer SPDI variant description parser.'
 version = '1.0.0'
 
 authors = [
-    {name = 'Mihai Lefter', email = 'M.Lefter@lumc.nl'}
-]
+    {name = 'LUMC, Mihai Lefter', email = 'M.Lefter@lumc.nl'}]
 readme = 'README.rst'
-license = 'MIT'
-keywords = ['Mutalyzer', 'HGVS', 'SPDI', 'description', 'parser', 'genomic']
 urls = {Homepage = 'https://github.com/mutalyzer/spdi-parser'}
+keywords = ['Mutalyzer', 'HGVS', 'SPDI', 'description', 'parser', 'genomic']
+license = 'MIT'
 classifiers = [
-    'Programming Language :: Python :: 3.10',
-    'Programming Language :: Python :: 3.11',
-    'Programming Language :: Python :: 3.12',
-    'Programming Language :: Python :: 3.13'
-    ]
+    'Intended Audience :: Developers',
+    'Intended Audience :: Science/Research',
+    'Operating System :: OS Independent',
+    'Programming Language :: Python',
+    'Programming Language :: Python :: 3',
+    'Topic :: Scientific/Engineering :: Bio-Informatics']
 
-requires-python = '>=3.10'
+requires-python = '>=3.9'
 dependencies = ['lark>=1.0.0']
 
 [tool.setuptools]
@@ -36,16 +36,18 @@ mutalyzer_spdi_parser = 'mutalyzer_spdi_parser.cli:main'
 
 [project.optional-dependencies]
 dev = [
-    'build>=1.6.1',
-    'fake-open>=0.0.1',
-    'flake8>=7.4.1',
-    'isort>=5.13.2',
     'pytest>=4.0.1',
+    'ruff>=0.17.0']
+release = [
+    'build>=1.6.1',
     'twine>=7.0.0']
 
-[tool.isort]
-multi_line_output = 3
-include_trailing_comma = true
-force_grid_wrap = 0
-use_parentheses = true
-line_length = 88
+[tool.ruff]
+line-length = 89
+
+[tool.ruff.lint]
+select = ['C90', 'E', 'F', 'I', 'W']
+ignore = ['E501', 'F401', 'F403']
+
+[tool.ruff.lint.mccabe]
+max-complexity = 18
