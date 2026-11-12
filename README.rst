@@ -18,7 +18,7 @@ Mutalyzer HGVS Parser
 .. image:: https://img.shields.io/github/languages/top/mutalyzer/spdi-parser.svg
    :target: https://github.com/mutalyzer/spdi-parser
 .. image:: https://img.shields.io/github/license/mutalyzer/spdi-parser.svg
-   :target: https://raw.githubusercontent.com/mutalyzer/spdi-parser/master/LICENSE.md
+   :target: https://raw.githubusercontent.com/mutalyzer/spdi-parser/master/LICENSE
 
 ----
 
